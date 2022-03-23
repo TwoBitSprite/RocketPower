@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CollisionHandler : MonoBehaviour
 {
@@ -12,12 +13,32 @@ public class CollisionHandler : MonoBehaviour
                 break;
 
             case "Finish":
-                Debug.Log("Congratulations!");
+                //Loads the next level
+                LoadNextLevel();
                 break;
 
             default:
-                Debug.Log("Sorry, you lose");
+                RestartOnDeath();
                 break;
         }
+    }
+
+    void LoadNextLevel()
+    {
+        // Restart level on death, if there are more levels, load next level, if not, loop back to level 1
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        int nextSceneIndex = currentSceneIndex +1;
+        if (nextSceneIndex == SceneManager.sceneCountInBuildSettings)
+        {
+            nextSceneIndex = 0;
+        }
+        SceneManager.LoadScene(nextSceneIndex);
+        
+    }
+
+    void RestartOnDeath()
+    {
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(currentSceneIndex);
     }
 }
